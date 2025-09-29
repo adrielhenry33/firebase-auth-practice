@@ -1,5 +1,5 @@
 import 'package:firebase_backend/firebase_options.dart';
-import 'package:firebase_backend/pages/login_page.dart';
+import 'package:firebase_backend/pages/main_page.dart';
 import 'package:firebase_core/firebase_core.dart' as fb_core;
 import 'package:flutter/material.dart';
 
@@ -19,8 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      
-      home: LoginPage(),
+      home: MainPage(),
     );
   }
 }
