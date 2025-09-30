@@ -2,31 +2,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends StatefulWidget {
-  final VoidCallback showRegisterPage;
+class RegisterPage extends StatefulWidget {
+  final VoidCallback showLoginPage;
 
-  const LoginPage({super.key, required this.showRegisterPage});
+  const RegisterPage({super.key, required this.showLoginPage});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
 
-  Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
+  Future signUp() async {
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: _emailController.text.trim(),
       password: _senhaController.text.trim(),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _emailController.dispose();
-    _senhaController.dispose();
   }
 
   @override
@@ -41,16 +34,9 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Icon(Icons.android, size: 100),
                 SizedBox(height: 75),
-                Text(
-                  'Olá novamente!',
-                  style: GoogleFonts.bebasNeue(fontSize: 52),
-                  maxLines: 1,
-                ),
+                Text('Olá!', style: GoogleFonts.bebasNeue(fontSize: 52)),
                 SizedBox(height: 15),
-                Text(
-                  'Bem-vindo de volta, você fez falta!',
-                  style: TextStyle(fontSize: 20),
-                ),
+                Text('Registre-se Abaixo!', style: TextStyle(fontSize: 20)),
                 SizedBox(height: 50),
 
                 Padding(
@@ -102,7 +88,8 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: GestureDetector(
                     onTap: () {
-                      signIn();
+                      signUp();
+                      widget.showLoginPage();
                     },
                     child: Container(
                       padding: EdgeInsets.all(20),
@@ -113,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: Center(
                         child: Text(
-                          'Entrar',
+                          'Cadastrar Agora',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -125,19 +112,20 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 SizedBox(height: 25),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Não é membro? ',
+                      'Já é membro? ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     GestureDetector(
                       onTap: () {
-                        widget.showRegisterPage();
+                        widget.showLoginPage();
                       },
                       child: Text(
-                        'Registre-se Aqui',
+                        'Faça login aqui!',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
