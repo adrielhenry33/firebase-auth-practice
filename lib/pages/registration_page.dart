@@ -1,32 +1,17 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_backend/pages/registration_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegistrationPage extends StatefulWidget {
+  const RegistrationPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegistrationPage> createState() => _RegistratioPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final _emailController = TextEditingController();
+class _RegistratioPageState extends State<RegistrationPage> {
   final _senhaController = TextEditingController();
-
-  Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _senhaController.text.trim(),
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _emailController.dispose();
-    _senhaController.dispose();
-  }
+  final _emailController = TextEditingController();
+  final _senhaConfirmController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: 15),
                 Text(
-                  'Bem-vindo de volta, você fez falta!',
+                  'Registre-se abaixo com seu email e senha!',
                   style: TextStyle(fontSize: 20),
                 ),
                 SizedBox(height: 50),
@@ -97,10 +82,33 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 15),
 
                 Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: TextField(
+                        controller: _senhaController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Confirmar Senha',
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 15,)
+,
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: GestureDetector(
                     onTap: () {
-                      signIn();
                     },
                     child: Container(
                       padding: EdgeInsets.all(20),
@@ -111,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: Center(
                         child: Text(
-                          'Login',
+                          'Cadastrar',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -122,26 +130,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 25),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Não é membro? ',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    GestureDetector(
-                      onTap: () => RegistrationPage() ,
-                      child: Text(
-                        'Registre-se Aqui',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                SizedBox(height: 15),
+
+               
               ],
             ),
           ),
