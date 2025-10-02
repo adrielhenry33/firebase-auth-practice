@@ -14,12 +14,30 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
+  final _senhaConfirmController = TextEditingController();
 
   Future signUp() async {
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _senhaController.text.trim(),
-    );
+    if (_passowordConfirmed()) {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _senhaController.text.trim(),
+      );
+    }
+  }
+
+  bool _passowordConfirmed() {
+    if (_senhaController.text.trim() == _senhaConfirmController.text.trim()) {
+      return true;
+    }
+    return false;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _senhaConfirmController.dispose();
+    _senhaController.dispose();
   }
 
   @override
@@ -83,13 +101,38 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: TextField(
+                        controller: _senhaConfirmController,
+
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Confirmar Senha',
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: GestureDetector(
                     onTap: () {
-                      signUp();
-                      widget.showLoginPage();
+                      if (_passowordConfirmed()) {
+                        signUp();
+                        widget.showLoginPage;
+                      }
                     },
                     child: Container(
                       padding: EdgeInsets.all(20),
@@ -100,7 +143,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       child: Center(
                         child: Text(
-                          'Cadastrar Agora',
+                          'Cadastrar-se',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
