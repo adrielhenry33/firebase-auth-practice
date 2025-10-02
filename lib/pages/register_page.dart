@@ -1,32 +1,42 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_backend/pages/forgot_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends StatefulWidget {
-  final VoidCallback showRegisterPage;
+class RegisterPage extends StatefulWidget {
+  final VoidCallback showLoginPage;
 
-  const LoginPage({super.key, required this.showRegisterPage});
+  const RegisterPage({super.key, required this.showLoginPage});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
+  final _senhaConfirmController = TextEditingController();
 
-  Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _senhaController.text.trim(),
-    );
+  Future signUp() async {
+    if (_passowordConfirmed()) {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _senhaController.text.trim(),
+      );
+    }
+  }
+
+  bool _passowordConfirmed() {
+    if (_senhaController.text.trim() == _senhaConfirmController.text.trim()) {
+      return true;
+    }
+    return false;
   }
 
   @override
   void dispose() {
     super.dispose();
     _emailController.dispose();
+    _senhaConfirmController.dispose();
     _senhaController.dispose();
   }
 
@@ -42,16 +52,9 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Icon(Icons.android, size: 100),
                 SizedBox(height: 75),
-                Text(
-                  'Olá novamente!',
-                  style: GoogleFonts.bebasNeue(fontSize: 52),
-                  maxLines: 1,
-                ),
+                Text('Olá!', style: GoogleFonts.bebasNeue(fontSize: 52)),
                 SizedBox(height: 15),
-                Text(
-                  'Bem-vindo de volta, você fez falta!',
-                  style: TextStyle(fontSize: 20),
-                ),
+                Text('Registre-se Abaixo!', style: TextStyle(fontSize: 20)),
                 SizedBox(height: 50),
 
                 Padding(
@@ -97,42 +100,39 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
-
+                SizedBox(height: 15),
                 Padding(
-                  padding: EdgeInsetsGeometry.symmetric(horizontal: 25),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return ForgotPasswordPage();
-                              },
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'Esqueceu sua Senha?',
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: TextField(
+                        controller: _senhaConfirmController,
+
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Confirmar Senha',
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
+                SizedBox(height: 15),
 
-                SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: GestureDetector(
                     onTap: () {
-                      signIn();
+                      if (_passowordConfirmed()) {
+                        signUp();
+                        widget.showLoginPage;
+                      }
                     },
                     child: Container(
                       padding: EdgeInsets.all(20),
@@ -143,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: Center(
                         child: Text(
-                          'Entrar',
+                          'Cadastrar-se',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -155,18 +155,24 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 SizedBox(height: 25),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Não é membro? ',
+                      'Já é membro? ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(
-                      'Registre-se Aqui',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: () {
+                        widget.showLoginPage();
+                      },
+                      child: Text(
+                        'Faça login aqui!',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
