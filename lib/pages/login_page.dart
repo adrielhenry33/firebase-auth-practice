@@ -25,9 +25,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _emailController.dispose();
     _senhaController.dispose();
+    super.dispose();
+
   }
 
   @override
@@ -41,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.android, size: 100),
-                SizedBox(height: 75),
+                SizedBox(height: 50),
                 Text(
                   'Olá novamente!',
                   style: GoogleFonts.bebasNeue(fontSize: 52),
@@ -164,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        widget.showRegisterPage;
+                        widget.showRegisterPage();
                       },
                       child: Text(
                         'Registre-se Aqui',

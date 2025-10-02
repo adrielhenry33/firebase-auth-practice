@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
       body: Center(child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Você esta logado como ${_user.email}'),
+          Text('Você esta logado como ${_user.email}', textAlign: TextAlign.center,),
           MaterialButton(onPressed: (){
             FirebaseAuth.instance.signOut();
           },

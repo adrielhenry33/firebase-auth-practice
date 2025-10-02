@@ -11,6 +11,13 @@ class ForgotPasswordPage extends StatefulWidget {
 class _ForgoPasswordPageState extends State<ForgotPasswordPage> {
   final _emailController = TextEditingController();
 
+  @override 
+  void dispose(){
+    _emailController.dispose();
+    super.dispose();
+
+  }
+
   Future _resetPassword() async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(
@@ -20,12 +27,13 @@ class _ForgoPasswordPageState extends State<ForgotPasswordPage> {
         context: context,
         builder: (context){
           return AlertDialog(
-            content: Text('Link de mudança de senha enviado! Cheque seu email'),
+            content: Text('Link de mudança de senha enviado! Verifique seu email'),
           );
         }
       );
 
     } on FirebaseAuthException catch (e) {
+     
       showDialog(
         context: context,
         builder: (context){

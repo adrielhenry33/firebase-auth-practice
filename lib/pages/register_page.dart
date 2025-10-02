@@ -15,6 +15,9 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
   final _senhaConfirmController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _ageController = TextEditingController();
 
   Future signUp() async {
     if (_passowordConfirmed()) {
@@ -26,18 +29,42 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   bool _passowordConfirmed() {
-    if (_senhaController.text.trim() == _senhaConfirmController.text.trim()) {
+    if (_senhaConfirmController.text.length < 6 ||
+        _senhaController.text.length < 6) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text('Senha invávlida digite pelo menos 6 caracteres'),
+          );
+        },
+      );
+      return false;
+    }
+
+    if(_senhaConfirmController.text.trim() == _senhaController.text.trim()){
       return true;
     }
+
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text('Senhas diferentes por favor informe senhas iguais'),
+          );
+        },
+      );
+
     return false;
+
   }
 
   @override
   void dispose() {
-    super.dispose();
     _emailController.dispose();
     _senhaConfirmController.dispose();
     _senhaController.dispose();
+    super.dispose();
   }
 
   @override
@@ -51,11 +78,34 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.android, size: 100),
-                SizedBox(height: 75),
+                SizedBox(height: 50),
                 Text('Olá!', style: GoogleFonts.bebasNeue(fontSize: 52)),
                 SizedBox(height: 15),
                 Text('Registre-se Abaixo!', style: TextStyle(fontSize: 20)),
-                SizedBox(height: 50),
+                SizedBox(height: 40),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: TextField(
+                        controller: _senhaController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Senha',
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15,),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -131,7 +181,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     onTap: () {
                       if (_passowordConfirmed()) {
                         signUp();
-                        widget.showLoginPage;
+                        widget.showLoginPage();
                       }
                     },
                     child: Container(
