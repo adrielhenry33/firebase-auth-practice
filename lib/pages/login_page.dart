@@ -162,11 +162,16 @@ class _LoginPageState extends State<LoginPage> {
                       'Não é membro? ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(
-                      'Registre-se Aqui',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: () {
+                        widget.showRegisterPage;
+                      },
+                      child: Text(
+                        'Registre-se Aqui',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],

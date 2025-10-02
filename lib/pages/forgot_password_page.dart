@@ -16,7 +16,25 @@ class _ForgoPasswordPageState extends State<ForgotPasswordPage> {
       await FirebaseAuth.instance.sendPasswordResetEmail(
         email: _emailController.text.trim(),
       );
-    } catch (e) {}
+      showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            content: Text('Link de mudança de senha enviado! Cheque seu email'),
+          );
+        }
+      );
+
+    } on FirebaseAuthException catch (e) {
+      showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            content: Text(e.message.toString()),
+          );
+        }
+      );
+    }
   }
 
   @override
