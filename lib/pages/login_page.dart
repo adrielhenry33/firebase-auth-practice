@@ -17,9 +17,31 @@ class _LoginPageState extends State<LoginPage> {
   final _senhaController = TextEditingController();
 
   Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
+    try {
+       await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: _emailController.text.trim(),
       password: _senhaController.text.trim(),
+    );
+    } on FirebaseAuthException catch (e) {
+      _showErrorDialog('Senha ou email incorretos! Tente novamente');
+    }
+   
+  }
+
+   void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 

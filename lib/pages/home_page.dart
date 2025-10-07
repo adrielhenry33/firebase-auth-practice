@@ -11,6 +11,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _user = FirebaseAuth.instance.currentUser!;
+  final _senhaController = TextEditingController();
 
   Future<DocumentSnapshot<Map<String, dynamic>>> _getUserId() async {
     //faz um get na coleção criada buscando todos os usuarios cadastrados nesta chave
@@ -19,6 +20,41 @@ class _HomePageState extends State<HomePage> {
         .collection('usuarios')
         .doc(_user.uid)
         .get();
+  }
+
+  Future <void> _deleteUser()async{
+    try {
+
+      FirebaseFirestore.instance.collection('usuarios').doc(_user.uid).delete();
+      
+    }on FirebaseAuthException  {
+      _showErrorDialog('Não foi possivel deletar o usuario, pois ele não existe');
+    } catch (e){
+      _showErrorDialog("Erro desconhecido entre em contato com o fornecedor $e" );
+    }
+
+  }
+
+  @override
+  void dispose() {
+    _senhaController.dispose();
+    super.dispose();
+  }
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -50,10 +86,9 @@ class _HomePageState extends State<HomePage> {
                 }
                 if (snapshot.hasData) {
                   final user = snapshot.data!.data();
-                  final nome = user?['Nome'];
-                  final sobrenome = user?['Sobrenome'];
-                  final idade = user?['Idade'];
-                  final email = user?['email'];
+                  final nome = user?['Nome'] ?? 'Usuario';
+                  final sobrenome = user?['Sobrenome'] ?? 'desconhecido';
+                  final idade = user?['Idade']?? 0; 
                   return Card.filled(
                     margin: EdgeInsets.all(15),
                     color: Colors.grey.shade100,
@@ -85,6 +120,14 @@ class _HomePageState extends State<HomePage> {
               },
               color: Colors.deepPurple[200],
               child: Text('Deslogar'),
+            ),
+
+            MaterialButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
+              color: Colors.red,
+              child: Text('Excluir conta'),
             ),
           ],
         ),
